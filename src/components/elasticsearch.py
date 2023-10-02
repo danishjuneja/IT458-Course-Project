@@ -16,7 +16,7 @@ def start():
     curr_path= os.getcwd()
     es_dir= os.path.join(curr_path, "./elastic-dir")
     pid_file="./es-pid"
-    no_docker=False
+    no_docker=True
     if not is_docker_available() or no_docker:
         print("Docker is not available. Trying to start elasticsearch locally.")
         subprocess.run([
@@ -33,8 +33,11 @@ def start():
                 "docker", "run", "-d",
                 "--name", "inc-rel-es",
                 "-p", "9200:9200",
+                "-p", "9300:9300",
+                "-m", "4GB",
                 "-e", 'discovery.type=single-node',
                 "-e", "xpack.security.enabled=false",
+                "-e", "indices.query.bool.max_clause_count=16384",
                 "-d", "elasticsearch:8.10.2"
                 ], check=True)
         wait_for_elasticsearch()

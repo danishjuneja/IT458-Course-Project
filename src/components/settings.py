@@ -58,14 +58,39 @@ class DatasetSettings(BaseSettings):
     def enrich_bm25_path(self) -> Union[str, None]:
         return None
 
+class TRECCovidDatasetSettings(DatasetSettings):
+    class Config:
+        env_file = ".env"
+        env_prefix = "INC_REL_TREC_COVID_"
 
+    name: str = "trec-covid"
+    raw_path: str
+    data_path: str
+    corpus_url: str
+    topics_url: str
+    qrels_url: str
+
+    remove_duplicates: bool = True
+
+    @property
+    def corpus_path(self) -> str:
+        return os.path.join(self.raw_path, "2020-07-16", "metadata.csv")
+
+    @property
+    def topics_path(self) -> str:
+        return os.path.join(self.raw_path, "topics-rnd5.xml")
+
+    @property
+    def qrels_path(self) -> str:
+        return os.path.join(self.raw_path, "qrels-covid_d5_j0.5-5.txt")
+    
 class WebisTouche2020DatasetSettings(DatasetSettings):
     class Config:
         env_file = ".env"
         env_prefix = "INC_REL_TOUCHE_"
 
     name: str = "touche"
-    ir_datasets_name: str
+    ir_datasets_name: str = "beir/webis-touche2020/v2"
     data_path: str
 
     @property
@@ -74,7 +99,21 @@ class WebisTouche2020DatasetSettings(DatasetSettings):
             os.path.join(self.data_path, "1000", "full_bm25_results.json")
         )
 
+class TRECRobustDatasetSettings(DatasetSettings):
+    class Config:
+        env_file = ".env"
+        env_prefix = "INC_REL_TREC_ROBUST_"
+
+    name: str = "robust04"
+    raw_path: str
+    data_path: str
+    username: str
+    password: SecretStr
+    corpus_disk4_url: str
+    corpus_disk5_url: str
 
 dataset_settings_cls = {
     "touche": WebisTouche2020DatasetSettings,
+    "robust04": TRECRobustDatasetSettings,
+    "trec-covid": TRECCovidDatasetSettings,
 }
