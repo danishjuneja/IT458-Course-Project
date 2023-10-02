@@ -1,7 +1,7 @@
 import os
 from typing import List, Union
 
-from pydantic import Field
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
