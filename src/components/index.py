@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 class Index:
     def __init__(self) -> None:
 
-        self.es = Elasticsearch(hosts=["localhost"],http_auth=('elastic', 'changeme'), timeout=3600, retry_after_timeout=True)
+        self.es = Elasticsearch(hosts=["localhost"],http_auth=('kekw', 'pessword'), timeout=3600, retry_after_timeout=True)
 
     def index_exists(self, index: str) -> bool:
         return self.es.indices.exists(index)
