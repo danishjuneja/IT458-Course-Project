@@ -42,13 +42,19 @@ def bm11(query, document, vocabulary, k1=1.2, b=0.75):
 
     for term in query_terms:
         if term in vocabulary:
+            # Calculate the document frequency
             df = calculate_df(term)
+
+            # Calculate the inverse document frequency
             idf = np.log((dataset.docs_count() - df + 0.5) / (df + 0.5))
+
+            # Calculate the term frequency
             tf = document_terms.count(term)
 
             numerator = tf * (k1 + 1)
             denominator = tf + k1 * (1 - b + b * doc_length / avg_doc_length)
 
+            # Update the BM11 score
             bm11_score += idf * numerator / denominator
 
     return bm11_score
@@ -69,13 +75,19 @@ def bm15(query, document, vocabulary, k1=1.2, b=0.75, delta=0.25):
 
     for term in query_terms:
         if term in vocabulary:
+            # Calculate the document frequency
             df = calculate_df(term)
+
+            # Calculate the inverse document frequency
             idf = np.log((dataset.docs_count() - df + 0.5) / (df + 0.5))
+
+            # Calculate the term frequency
             tf = document_terms.count(term)
 
             numerator = tf * (k1 + 1)
             denominator = tf + k1 * (1 - b + b * doc_length / avg_doc_length)
 
+            # Update the BM15 score
             bm15_score += idf * (numerator / denominator + delta)
 
     return bm15_score
